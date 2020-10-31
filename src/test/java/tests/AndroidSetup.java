@@ -1,4 +1,4 @@
-package scenarios;
+package tests;
 
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -9,7 +9,6 @@ import java.net.URL;
 
 public class AndroidSetup {
     protected AndroidDriver driver;
-
     protected void prepareAndroidForAppium() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName","Android");

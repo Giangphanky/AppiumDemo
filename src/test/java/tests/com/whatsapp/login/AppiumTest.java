@@ -1,11 +1,16 @@
-package scenarios;
+package tests.com.whatsapp.login;
 
+import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import pages.LoginPage;
+import screenObjects.whatsapp.com.LoginScreenObject;
+import tests.AndroidSetup;
 
 public class AppiumTest extends AndroidSetup {
+
+    //private AndroidDriver driver;
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -18,8 +23,8 @@ public class AppiumTest extends AndroidSetup {
     }
 
     @Test
-    public void falseLoginTest() throws InterruptedException {
-        new LoginPage(driver).invalidLogin();
+    public void TC_01_Go_To_PhoneNumber_Page() throws InterruptedException {
+        new LoginScreenObject(driver).invalidLogin();
     }
 
     @Test

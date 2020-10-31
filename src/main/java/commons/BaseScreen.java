@@ -1,34 +1,88 @@
-package pages;
+package commons;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.NoSuchElementException;
+
+import java.util.List;
+
+import org.testng.Assert;
 
 import java.util.HashMap;
 
 /**
- * Created by nishant on 13/09/14.
+ * Created by giangpk on 30/10/20.
  */
-public class BasePage {
+public class BaseScreen {
 
+    protected AndroidDriver driver;
+    protected WebDriverWait wait;
 
-    protected WebDriver driver;
-
-    public BasePage(WebDriver driver) {
+    public BaseScreen(AndroidDriver driver) {
         this.driver = driver;
+        wait = new WebDriverWait(driver, 15);
     }
 
     protected void waitForVisibilityOf(By locator) {
         WebDriverWait wait = new WebDriverWait(driver, 30);
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
+
     protected void waitForClickabilityOf(By locator) {
         WebDriverWait wait = new WebDriverWait(driver, 30);
         wait.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+
+
+    protected void waitAndClick(By by) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by)).click();
+    }
+
+    protected void click(By by) {
+        waitVisibility(by);
+        driver.findElement(by).click();
+    }
+
+    protected void hideKeyboard() {
+        driver.navigate().back();
+    }
+
+    protected boolean isElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    protected List<WebElement> waitAndFindElements(By by) {
+        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+    }
+
+    protected WebElement waitAndFindElement(By by) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
+    protected String getText(By by) {
+        return waitAndFindElement(by).getText();
+    }
+
+    protected void sendText(By by, String text) {
+        waitAndFindElement(by).sendKeys(text);
+    }
+
+    protected void assertEquals(String actual, String expected) {
+        Assert.assertEquals(actual, expected, "Two texts are not equal!" + "Actual: " + actual + " Expected: " + expected);
+    }
+
+    protected void waitVisibility(By by) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 
     public void scrollPageUp() {
@@ -84,4 +138,15 @@ public class BasePage {
         tapObject.put("element", Double.valueOf(((RemoteWebElement) elementToTap).getId()));
         js.executeScript("mobile: tap", tapObject);
     }
+
+
+    protected void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
